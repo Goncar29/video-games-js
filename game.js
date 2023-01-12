@@ -17,13 +17,13 @@ function startGame() {
 
     const elementSize = canvasSize / 10;
 
-    console.log({canvasSize, elementSize});
+    console.log({ canvasSize, elementSize });
 
     game.font = elementSize + 'px Verdana';
     game.textAlign = 'end';
 
     for (let i = 1; i <= 10; i++){
-        game.fillText(emojis['X'], elementSize * 1, elementSize);
+        game.fillText(emojis['X'], elementSize, elementSize * i);
     }
 }
 /*     game.fiilRect(0,0,100,100) //definimos el lugar donde iniciar el trazo (cualquier cosa)
