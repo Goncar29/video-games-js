@@ -1,11 +1,13 @@
 const canvas = document.querySelector('#game');
 const game = canvas.getContext('2d');
 
+let canvasSize;
+let elementSize;
+
 window.addEventListener('load', startGame);
+window.addEventListener('resize', setCanvasSize);
 
-function startGame() {
-    let canvasSize;
-
+function setCanvasSize() {
     if (window.innerHeight > window.innerWidth){
         canvasSize = window.innerWidth * 0.8;
     }else{
@@ -15,7 +17,12 @@ function startGame() {
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
-    const elementSize = canvasSize / 10;
+    elementSize = canvasSize / 10;
+
+    startGame();
+}
+
+function startGame() {
 
     console.log({ canvasSize, elementSize });
 
@@ -26,6 +33,8 @@ function startGame() {
         game.fillText(emojis['X'], elementSize, elementSize * i);
     }
 }
+
+
 /*     game.fiilRect(0,0,100,100) //definimos el lugar donde iniciar el trazo (cualquier cosa)
     game.clearRect(50,50,50,50)  // borramos trazo
     game.clearRect()
