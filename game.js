@@ -50,6 +50,30 @@ function startGame() {
     // }
 }
 
+window.addEventListener('keydown', moveByKeys);
+btnUp.addEventListener('click', moveUp);
+btnLeft.addEventListener('click', moveLeft);
+btnRight.addEventListener('click', moveRight);
+btnUDown.addEventListener('click', moveDown);
+
+function moveByKeys(event){
+    if (event.key == 'ArrowUp') moveUp();
+    else if (event.key == 'ArrowLeft') moveLeft();
+    else if (event.key == 'ArrowRight') moveRight();
+    else if (event.key == 'ArrowDown') moveDown();
+}
+function moveUp(){
+    console.log('Me quiero mover hacia arriba')
+}
+function moveLeft(){
+    console.log('Me quiero mover hacia la izquierda')
+}
+function moveRight(){
+    console.log('Me quiero mover hacia la derecha')
+}
+function moveDown(){
+    console.log('Me quiero mover hacia abajo')
+}
 
 /*     game.fiilRect(0,0,100,100) //definimos el lugar donde iniciar el trazo (cualquier cosa)
     game.clearRect(50,50,50,50)  // borramos trazo
