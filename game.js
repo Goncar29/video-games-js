@@ -42,6 +42,8 @@ function startGame() {
     const mapRowCols = mapRows.map(row => row.trim().split('')); // ahora quitamos los espacios a cada array y separamos por cada elemento
     console.log({map, mapRows, mapRowCols});
     
+    // borramos todo el mapa para que cada movimiento del jugador desaparezca su posicion anterior
+    game.clearRect(0, 0, canvasSize, canvasSize); 
     // Posicionamos cada elemento del mapa 
     mapRowCols.forEach((row, rowIndex) => {
         row.forEach((col, colIndex) =>{
@@ -57,10 +59,12 @@ function startGame() {
 
             //  Aqui debe de ir el jugador
             if(col == 'O'){
-                console.log({ posX, posY });
-                playerPosition.x = posX;
-                playerPosition.y = posY;
-                console.log({playerPosition});
+                if(!playerPosition.x && !playerPosition.y){
+                    console.log({ posX, posY });
+                    playerPosition.x = posX;
+                    playerPosition.y = posY;
+                    console.log({playerPosition});
+                }
             }
 
             //  Renderizamos el mapa con los emojis correspondiente del mapa
@@ -91,16 +95,22 @@ function moveByKeys(event){
 function moveUp(){
     console.log('Me quiero mover hacia arriba')
     playerPosition.y -= elementsSize;
-    movePlayer();
+    startGame(); //volvemos a ejecutar el juego con cada movimietno del jugador para eliminar su posicion anterior
 }
 function moveLeft(){
     console.log('Me quiero mover hacia la izquierda')
+    playerPosition.x -= elementsSize;
+    startGame();
 }
 function moveRight(){
     console.log('Me quiero mover hacia la derecha')
+    playerPosition.x += elementsSize;
+    startGame();
 }
 function moveDown(){
     console.log('Me quiero mover hacia abajo')
+    playerPosition.y += elementsSize;
+    startGame();
 }
 
 /*     game.fiilRect(0,0,100,100) //definimos el lugar donde iniciar el trazo (cualquier cosa)
