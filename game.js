@@ -16,6 +16,7 @@ const giftPosition = {
     x: undefined,
     y: undefined,
 };
+let enemyPositions = [];
 
 window.addEventListener('load', startGame);
 window.addEventListener('resize', setCanvasSize);
@@ -45,7 +46,9 @@ function startGame() {
     const mapRows = map.trim().split('\n'); // quitamos los espacios vacios al inicio y final y los convertimos en array
     const mapRowCols = mapRows.map(row => row.trim().split('')); // ahora quitamos los espacios a cada array y separamos por cada elemento
     console.log({map, mapRows, mapRowCols});
-    
+
+    // limpiamos el erray de las bombas porque se duplica cada vez que se ejecuta la funcion
+    enemyPositions = [];
     // borramos todo el mapa para que cada movimiento del jugador desaparezca su posicion anterior
     game.clearRect(0, 0, canvasSize, canvasSize); 
     // Posicionamos cada elemento del mapa 
@@ -72,6 +75,11 @@ function startGame() {
             } else if(col == 'I'){
                 giftPosition.x = posX;
                 giftPosition.y = posY;
+            } else if(col == 'X'){
+                enemyPositions.push({
+                    x: posX,
+                    y: posY,
+                })
             }
 
             //  Renderizamos el mapa con los emojis correspondiente del mapa
@@ -93,6 +101,15 @@ if(giftCollision){
     console.log('Subiste de nivel')
 }
 
+const enemyPosition = enemyPositions.find(enemy => {
+    const enemyCollitionX = enemy.x.toFixed(2) == playerPosition.x.toFixed(2);
+    const enemyCollitionY = enemy.y.toFixed(2) == playerPosition.y.toFixed(2);
+    return enemyCollitionX && enemyCollitionY;
+});
+
+if(enemyPosition){
+    console.log('Chocaste con una bomba')
+}
     game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
@@ -110,7 +127,7 @@ function moveByKeys(event){
 }
 function moveUp(){
     console.log('Me quiero mover hacia arriba')
-
+    //condicion para evitar salir del mapa
     if ((playerPosition.y - elementsSize) < elementsSize){
         console.log('OUT')
     }else{
