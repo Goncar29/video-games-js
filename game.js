@@ -12,6 +12,10 @@ const playerPosition = {
     x: undefined,
     y: undefined,
 };
+const giftPosition = {
+    x: undefined,
+    y: undefined,
+};
 
 window.addEventListener('load', startGame);
 window.addEventListener('resize', setCanvasSize);
@@ -65,11 +69,14 @@ function startGame() {
                     playerPosition.y = posY;
                     console.log({playerPosition});
                 }
+            } else if(col == 'I'){
+                giftPosition.x = posX;
+                giftPosition.y = posY;
             }
 
             //  Renderizamos el mapa con los emojis correspondiente del mapa
             game.fillText(emoji, posX, posY);
-            console.log({ row, rowIndex, col, colIndex });
+            // console.log({ row, rowIndex, col, colIndex });
         });
     });
 
@@ -77,6 +84,15 @@ function startGame() {
 }
 //  Renderizamos al jugador
 function movePlayer(){
+    //colocamos toFixed() porque evitamos la cantidad de decimales que nos genera el error de no poder coincidir con la colicion del regalo y subir de nivel
+const giftCollisionX = playerPosition.x.toFixed(2) == giftPosition.x.toFixed(2);
+const giftCollisionY = playerPosition.y.toFixed(2) == giftPosition.y.toFixed(2);
+const giftCollision = giftCollisionX && giftCollisionY;
+
+if(giftCollision){
+    console.log('Subiste de nivel')
+}
+
     game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
@@ -94,23 +110,43 @@ function moveByKeys(event){
 }
 function moveUp(){
     console.log('Me quiero mover hacia arriba')
-    playerPosition.y -= elementsSize;
-    startGame(); //volvemos a ejecutar el juego con cada movimietno del jugador para eliminar su posicion anterior
+
+    if ((playerPosition.y - elementsSize) < elementsSize){
+        console.log('OUT')
+    }else{
+        playerPosition.y -= elementsSize;
+        startGame(); //volvemos a ejecutar el juego con cada movimietno del jugador para eliminar su posicion anterior    
+    }
 }
 function moveLeft(){
     console.log('Me quiero mover hacia la izquierda')
-    playerPosition.x -= elementsSize;
-    startGame();
+
+    if ((playerPosition.x - elementsSize) < elementsSize){
+        console.log('OUT')
+    }else{
+        playerPosition.x -= elementsSize;
+        startGame();
+    }
 }
 function moveRight(){
     console.log('Me quiero mover hacia la derecha')
-    playerPosition.x += elementsSize;
-    startGame();
+    
+    if ((playerPosition.x + elementsSize) > canvasSize){
+        console.log('OUT')
+    }else{
+        playerPosition.x += elementsSize;
+        startGame();
+    }
 }
 function moveDown(){
     console.log('Me quiero mover hacia abajo')
-    playerPosition.y += elementsSize;
-    startGame();
+    
+    if ((playerPosition.y + elementsSize) > canvasSize){
+        console.log('OUT')
+    }else{
+        playerPosition.y += elementsSize;
+        startGame();
+    }
 }
 
 /*     game.fiilRect(0,0,100,100) //definimos el lugar donde iniciar el trazo (cualquier cosa)
