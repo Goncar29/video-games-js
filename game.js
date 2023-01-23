@@ -117,6 +117,7 @@ function movePlayer(){
 
     if(enemyPosition){
         console.log('Chocaste con una bomba')
+        levelFail();
     }
         game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
@@ -124,6 +125,12 @@ function movePlayer(){
 function levelWin(){
     console.log('Subiste de nivel');
     level++;
+    startGame();
+}
+
+function levelFail(){
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
     startGame();
 }
 
