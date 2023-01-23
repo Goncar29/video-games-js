@@ -7,6 +7,7 @@ const btnDown = document.querySelector('#down');
 
 let canvasSize;
 let elementsSize;
+let level = 0;
 
 const playerPosition = {
     x: undefined,
@@ -18,7 +19,7 @@ const giftPosition = {
 };
 let enemyPositions = [];
 
-window.addEventListener('load', startGame);
+window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
 function setCanvasSize() {
@@ -41,8 +42,14 @@ function startGame() {
 
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'end';
+    
+    const map = maps[level]; // Elegimos el mapa
 
-    const map = maps[0]; // Elegimos el mapa
+    if (!map) {
+        gameWin();
+        return;
+    }
+
     const mapRows = map.trim().split('\n'); // quitamos los espacios vacios al inicio y final y los convertimos en array
     const mapRowCols = mapRows.map(row => row.trim().split('')); // ahora quitamos los espacios a cada array y separamos por cada elemento
     console.log({map, mapRows, mapRowCols});
@@ -93,24 +100,35 @@ function startGame() {
 //  Renderizamos al jugador
 function movePlayer(){
     //colocamos toFixed() porque evitamos la cantidad de decimales que nos genera el error de no poder coincidir con la colicion del regalo y subir de nivel
-const giftCollisionX = playerPosition.x.toFixed(2) == giftPosition.x.toFixed(2);
-const giftCollisionY = playerPosition.y.toFixed(2) == giftPosition.y.toFixed(2);
-const giftCollision = giftCollisionX && giftCollisionY;
+    const giftCollisionX = playerPosition.x.toFixed(2) == giftPosition.x.toFixed(2);
+    const giftCollisionY = playerPosition.y.toFixed(2) == giftPosition.y.toFixed(2);
+    const giftCollision = giftCollisionX && giftCollisionY;
 
-if(giftCollision){
-    console.log('Subiste de nivel')
+    if(giftCollision){
+        levelWin();
+        console.log('Subiste de nivel')
+    }
+
+    const enemyPosition = enemyPositions.find(enemy => {
+        const enemyCollitionX = enemy.x.toFixed(2) == playerPosition.x.toFixed(2);
+        const enemyCollitionY = enemy.y.toFixed(2) == playerPosition.y.toFixed(2);
+        return enemyCollitionX && enemyCollitionY;
+    });
+
+    if(enemyPosition){
+        console.log('Chocaste con una bomba')
+    }
+        game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
-const enemyPosition = enemyPositions.find(enemy => {
-    const enemyCollitionX = enemy.x.toFixed(2) == playerPosition.x.toFixed(2);
-    const enemyCollitionY = enemy.y.toFixed(2) == playerPosition.y.toFixed(2);
-    return enemyCollitionX && enemyCollitionY;
-});
-
-if(enemyPosition){
-    console.log('Chocaste con una bomba')
+function levelWin(){
+    console.log('Subiste de nivel');
+    level++;
+    startGame();
 }
-    game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+
+function gameWin(){
+    console.log('Terminaste el juego!')
 }
 
 window.addEventListener('keydown', moveByKeys);
