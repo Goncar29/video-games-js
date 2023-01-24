@@ -4,6 +4,7 @@ const btnUp = document.querySelector('#up');
 const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
+const spanLives = document.querySelector('#lives')
 
 let canvasSize;
 let elementsSize;
@@ -54,6 +55,8 @@ function startGame() {
     const mapRows = map.trim().split('\n'); // quitamos los espacios vacios al inicio y final y los convertimos en array
     const mapRowCols = mapRows.map(row => row.trim().split('')); // ahora quitamos los espacios a cada array y separamos por cada elemento
     console.log({map, mapRows, mapRowCols});
+
+    showLives();
 
     // limpiamos el erray de las bombas porque se duplica cada vez que se ejecuta la funcion
     enemyPositions = [];
@@ -147,6 +150,14 @@ function levelFail(){
 
 function gameWin(){
     console.log('Terminaste el juego!')
+}
+
+function showLives(){
+    // creamos un array usando (Array) con la cantidad de vidas y usamos fill para que inserte la cantidad de lives
+    const heartsArray = Array(lives).fill(emojis['HEART'])
+    console.log(heartsArray)
+
+    spanLives.innerHTML = heartsArray.join(''); // el join es solo para quitar las comas del array
 }
 
 window.addEventListener('keydown', moveByKeys);
