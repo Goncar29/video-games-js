@@ -5,11 +5,18 @@ const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 const spanLives = document.querySelector('#lives')
+const spanTime = document.querySelector('#time')
+const spanRecord = document.querySelector('#record')
+const pResult = document.querySelector('#result')
 
 let canvasSize;
 let elementsSize;
 let level = 0;
 let lives = 3;
+
+let timeStart;
+let timePlayer;
+let timeInterval;
 
 const playerPosition = {
     x: undefined,
@@ -50,6 +57,12 @@ function startGame() {
     if (!map) {
         gameWin();
         return;
+    }
+
+    if(!timeStart){
+        timeStart = Date.now();
+        timeInterval = setInterval(showTime, 100);
+        showRecord();
     }
 
     const mapRows = map.trim().split('\n'); // quitamos los espacios vacios al inicio y final y los convertimos en array
@@ -142,6 +155,7 @@ function levelFail(){
     if (lives <= 0) {
         level = 0;
         lives = 3;
+        timeStart = undefined; // si perdemos el tiempo vuelve a 0
     }
     playerPosition.x = undefined;
     playerPosition.y = undefined;
@@ -149,7 +163,24 @@ function levelFail(){
 }
 
 function gameWin(){
-    console.log('Terminaste el juego!')
+    console.log('Terminaste el juego!');
+    clearInterval(timeInterval)
+
+    const recordTime = localStorage.getItem('record_time');
+    const playerTime = ((Date.now() - timeStart)/1000).toFixed(1);
+
+    if(recordTime){ // vemos si hay un tiempo
+        if(recordTime > playerTime){ // vemos si el tiempo fue superado
+            localStorage.setItem('record_time', playerTime)
+            pResult.innerHTML = 'Superaste el record!';
+        } else{
+            pResult.innerHTML = 'No superaste el tiempo';
+        }
+    } else{
+        localStorage.setItem('record_time', playerTime)
+        pResult.innerHTML = 'Primera vez? Muy bien! ahora trata de superar el record!';
+    }
+    console.log({recordTime, playerTime});
 }
 
 function showLives(){
@@ -158,6 +189,16 @@ function showLives(){
     console.log(heartsArray)
 
     spanLives.innerHTML = heartsArray.join(''); // el join es solo para quitar las comas del array
+}
+
+function showTime(){
+    // Mostramos el tiempo en segundos
+    spanTime.innerHTML = ((Date.now() - timeStart)/1000).toFixed(1);
+}
+
+function showRecord(){
+    // Mostramos el tiempo en segundos
+    spanRecord.innerHTML = localStorage.getItem('record_time');
 }
 
 window.addEventListener('keydown', moveByKeys);
