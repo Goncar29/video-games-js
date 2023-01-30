@@ -8,6 +8,7 @@ const spanLives = document.querySelector('#lives')
 const spanTime = document.querySelector('#time')
 const spanRecord = document.querySelector('#record')
 const pResult = document.querySelector('#result')
+const reset = document.querySelector('#reset')
 
 let canvasSize;
 let elementsSize;
@@ -30,6 +31,7 @@ let enemyPositions = [];
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
+reset.addEventListener('click', resetGame);
 
 function fixNumber(n) {
     return Number(n.toFixed(2));
@@ -207,6 +209,10 @@ function showTime(){
 function showRecord(){
     // Mostramos el tiempo en segundos
     spanRecord.innerHTML = localStorage.getItem('record_time');
+}
+
+function resetGame(){
+    location.reload();
 }
 
 window.addEventListener('keydown', moveByKeys);
